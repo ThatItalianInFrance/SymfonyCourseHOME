@@ -36,10 +36,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
+    #[Assert\Regex(pattern: "#(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}#", match: true, message: "nay man REGEX don't match need 1 A 1! and 8totals" )]
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Assert\EqualTo(("password"))]
+    #[Assert\EqualTo(propertyPath: "password", message: "no man, password must match!")]
     public $password_confirm;
     
     #[Assert\Length(min: 3, max: 19, minMessage: 'two short buddie', maxMessage: "too much bud!")]

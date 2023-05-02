@@ -28,7 +28,7 @@ class RegisterController extends AbstractController
     public function index(Request $request, EntityManagerInterface $manager): Response
     {
 
-        
+
         $user=new User();
         $form=$this->createForm(RegisterType::class, $user);
 
@@ -40,9 +40,16 @@ class RegisterController extends AbstractController
                 $user->getPassword()
             ));
             $manager->persist($user); // previent doctrine que l'on veut sauver on persiste dans le temps
-            $manager->flush(); // envoi la requête à la base de donnée
-            }
            
+            // $this->addFlash() is equivalent to $request->getSession()->getFlashBag()->add()
+            $manager->flush(); // envoi la requête à la base de donnée
+            
+            $this->addFlash(
+                'notice',
+                'Your changes were saved!'
+            );
+            // return $this->redirectToRoute('app_bonjour');
+        }
         return $this->render('register/index.html.twig', [
             "form"=>$form->createView(),
             'controller_name' => 'RegisterController',
